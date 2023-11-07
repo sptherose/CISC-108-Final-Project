@@ -30,6 +30,16 @@ def move_right_p1(world: World):
 def move_left_p1(world: World):
     """This function moves Player 1 to the left when it get's called"""
     world.player_1_speed = -PLAYER_SPEED
+def stop_moving_players(world:World):
+    """This function prevents Players 1 and 2 from running off of the screen"""
+    if world.player_1.x > get_width():
+        world.player_1_speed = 0
+    elif world.player_1.x < 0:
+        world.player_1_speed = 0
+    if world.player_2.x > get_width():
+        world.player_2_speed = 0
+    elif world.player_2.x < 0:
+        world.player_2_speed = 0
 def move_player1(world: World, key: str):
     """This function takes in the key being pressed and makes Player 1 move accordingly,
     calling the appropriate helper functions"""
@@ -126,4 +136,5 @@ when('starting', create_world)
 when('typing', keys_pressed_p1, keys_pressed_p2, move_player1,move_player2)
 when('done typing', keys_not_pressed_p1, keys_not_pressed_p2)
 when('updating', move_player1, move_player2)
+when ('updating',stop_moving_players)
 start()

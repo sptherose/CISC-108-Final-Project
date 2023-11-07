@@ -15,7 +15,7 @@ Milestone 1 Task List:
 - [x] create 2 player objects
 - [x] make both players controllable
     (W and Up for jumping, A and Left to move left, D and Right to move right, S and Down for flashlight)
-- [] make it so players can't move off the screen 
+- [x] make it so players can't move off the screen 
     (edge of screen serves as a wall and there is no wrapping)
 - []Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
 - [] make flashlight disappear after a second or 2
