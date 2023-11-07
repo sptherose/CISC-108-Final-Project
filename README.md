@@ -12,28 +12,28 @@ Advance to next level by reaching the cave entrance at the top of each level (bo
 Have to flash a flashlight to scare away bats or else the player might get bitten and lose HP
 
 Milestone 1 Task List:
-[x] create 2 player objects
-[x] make both players controllable
+- [x] create 2 player objects
+- [x] make both players controllable
     (W and Up for jumping, A and Left to move left, D and Right to move right, S and Down for flashlight)
-[] make it so players can't move off the screen 
+- [] make it so players can't move off the screen 
     (edge of screen serves as a wall and there is no wrapping)
-[]Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
-[] make flashlight disappear after a second or 2
+- []Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
+- [] make flashlight disappear after a second or 2
 
 Milestone 2 Task List:
-[] Add platforms for players to jump on
-[] Add Bat Objects 
-[] Add Bat and Player Interactions
-[] Add Cave Entrance Object
-[] Add Player and Cave Entrance Interaction
+- [] Add platforms for players to jump on
+- [] Add Bat Objects 
+- [] Add Bat and Player Interactions
+- [] Add Cave Entrance Object
+- [] Add Player and Cave Entrance Interaction
 
 Milestone 3 Task List:
-[] Add Health bar
-[] Add Timer
-[] Add Game Over Screen
+- [] Add Health bar
+- [] Add Timer
+- [] Add Game Over Screen
     (Displays Empty Health bar and Timer and Play Again Button when player dies)
-[] Add Level Completion Screen
+- [] Add Level Completion Screen
     (Displays Timer and Remaining Health and Next Level Button When each level is beat)
-[] Add Game Completion Screen
+- [] Add Game Completion Screen
     (Displays Total Time when the game is beaten)
-[] Add a way to gain back health (this addition is subject to difficulty found when testing)
+- [] Add a way to gain back health (this addition is subject to difficulty found when testing)
