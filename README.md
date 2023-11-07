@@ -12,12 +12,12 @@ Advance to next level by reaching the cave entrance at the top of each level (bo
 Have to flash a flashlight to scare away bats or else the player might get bitten and lose HP
 
 Milestone 1 Task List:
-[] create 2 player objects
-[] make both players controllable
+- [ ] create 2 player objects
+- [ ] make both players controllable
     (W and Up for jumping, A and Left to move left, D and Right to move right, S and Down for flashlight)
-[] make it so players can't move off the screen 
+- [ ] make it so players can't move off the screen 
     (edge of screen serves as a wall and there is no wrapping)
-[]Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
+- [ ] Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
 
 Milestone 2 Task List:
 [] Add platforms for players to jump on
