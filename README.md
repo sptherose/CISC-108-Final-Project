@@ -13,7 +13,7 @@ Have to flash a flashlight to scare away bats or else the player might get bitte
 
 Milestone 1 Task List:
 [x] create 2 player objects
-[] make both players controllable
+[x] make both players controllable
     (W and Up for jumping, A and Left to move left, D and Right to move right, S and Down for flashlight)
 [] make it so players can't move off the screen 
     (edge of screen serves as a wall and there is no wrapping)
