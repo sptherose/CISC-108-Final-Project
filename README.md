@@ -17,7 +17,7 @@ Milestone 1 Task List:
     (W and Up for jumping, A and Left to move left, D and Right to move right, S and Down for flashlight)
 - [x] make it so players can't move off the screen 
     (edge of screen serves as a wall and there is no wrapping)
-- []Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
+- [x]Add gravity so that when players jump (and fall off platforms once levels are made) they fall back down
 - [x] make flashlight disappear after a second or 2
   (EDIT: changed this to make flashlight stay for as long as players held on to the S or Down buttons)
 
