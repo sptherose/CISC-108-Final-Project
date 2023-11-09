@@ -1,11 +1,15 @@
 from dataclasses import dataclass
 from designer import *
 
-PLAYER_SPEED = 5
+PLAYER_SPEED = 10
+
+class MovingEmoji(Emoji):
+    speed: int
+    direction: int
 @dataclass
 class World:
-    player_1: DesignerObject
-    player_2: DesignerObject
+    player_1: MovingEmoji
+    player_2: MovingEmoji
     jumping_1: False
     jumping_2: False
     player_1_left: False
@@ -19,10 +23,9 @@ class World:
     player_1_flash_on : False
     player_2_flash_on : False
 
-
-def create_player1() -> DesignerObject:
+def create_player1() -> MovingEmoji:
     """This creates Player 1 and makes him appear on the bottom left of the screen"""
-    player_1 = emoji('🧍')
+    player_1 = MovingEmoji('🧍',speed=5,direction=0)
     grow(player_1, 2)
     player_1.y = get_height() - 40
     player_1.x = 12
@@ -62,8 +65,7 @@ def move_player1(world: World, key: str):
     if not world.player_1_left and not world.player_1_right:
         world.player_1_speed = 0
     if key == "W":
-        world.player_1.y += -10
-        glide_down(world.player_1, 5)
+        world.player_1.speed += -50
     if world.player_1_flash_on:
         world.player_1_flashlight.y = world.player_1.y + 5
         world.player_1_flashlight.x = world.player_1.x + 20
@@ -93,9 +95,9 @@ def keys_not_pressed_p1(world: World, key: str):
     if key == "S":
         world.player_1_flash_on = False
 
-def create_player2() -> DesignerObject:
+def create_player2() -> MovingEmoji:
     """This creates Player 2 and makes him appear on the bottom left of the screen"""
-    player_2 = emoji('🧍')
+    player_2 = MovingEmoji('🧍',speed=5,direction=0)
     grow(player_2, 2)
     player_2.y = get_height() - 40
     player_2.x = 20
@@ -125,8 +127,7 @@ def move_player2(world: World, key: str):
     if not world.player_2_left and not world.player_2_right:
         world.player_2_speed = 0
     if key == "Up":
-        world.player_2.y += -10
-        glide_down(world.player_2, 5)
+        world.player_2.speed += -50
     if world.player_2_flash_on:
         world.player_2_flashlight.y = world.player_2.y + 5
         world.player_2_flashlight.x = world.player_2.x + 20
@@ -152,7 +153,15 @@ def keys_not_pressed_p2(world: World, key: str):
     if key == "Right":
         world.player_2_right = False
     if key == "Down":
-        world.player_2_flash_on = Falses
+        world.player_2_flash_on = False
+def accelerate_player(world:World):
+    if world.player_1.y + world.player_1.speed<=  get_height() - 40:
+        world.player_1.y += world.player_1.speed
+        world.player_1.speed += 10
+    if world.player_2.y + world.player_2.speed <= get_height() - 40:
+        world.player_2.y += world.player_2.speed
+        world.player_2.speed += 10
+
 def create_world() -> World:
     return World(create_player1(), create_player2(), False, False, False, False, False, False, 0, 0, create_p1_flashlight(), create_p2_flashlight(),False,False)
 
@@ -162,4 +171,5 @@ when('typing', keys_pressed_p1, keys_pressed_p2, move_player1,move_player2)
 when('done typing', keys_not_pressed_p1, keys_not_pressed_p2)
 when('updating', move_player1, move_player2)
 when ('updating',stop_moving_players)
+when('updating',accelerate_player)
 start()
