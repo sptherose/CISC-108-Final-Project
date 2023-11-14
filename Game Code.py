@@ -23,6 +23,8 @@ class World:
     player_1_flash_on : False
     player_2_flash_on : False
 
+def create_ground() -> Emoji:
+    ground_platform = rectangle()
 def create_player1() -> MovingEmoji:
     """This creates Player 1 and makes him appear on the bottom left of the screen"""
     player_1 = MovingEmoji('🧍',speed=5,direction=0)
@@ -36,6 +38,7 @@ def create_p1_flashlight() -> DesignerObject:
     player_1_flashlight = emoji("🔦")
     grow(player_1_flashlight, -1 / 2)
     turn_left(player_1_flashlight, 45)
+    player_1_flashlight.flip_x = False
     hide(player_1_flashlight)
     return player_1_flashlight
 def move_right_p1(world: World):
@@ -44,6 +47,16 @@ def move_right_p1(world: World):
 def move_left_p1(world: World):
     """This function moves Player 1 to the left when it gets called"""
     world.player_1_speed = -PLAYER_SPEED
+def turn_on_flash_p1(world:World):
+    """This function turns on Player 1's flashlight when it gets called"""
+    if not world.player_1.flip_x:
+        world.player_1_flashlight.flip_x = False
+        world.player_1_flashlight.y = world.player_1.y + 5
+        world.player_1_flashlight.x = world.player_1.x + 20
+    if world.player_1.flip_x:
+        world.player_1_flashlight.flip_x = True
+        world.player_1_flashlight.y = world.player_1.y + 5
+        world.player_1_flashlight.x = world.player_1.x + 20
 def stop_moving_players(world:World):
     """This function prevents Players 1 and 2 from running off of the screen"""
     if world.player_1.x > get_width():
@@ -67,8 +80,7 @@ def move_player1(world: World, key: str):
     if key == "W":
         world.player_1.speed += -50
     if world.player_1_flash_on:
-        world.player_1_flashlight.y = world.player_1.y + 5
-        world.player_1_flashlight.x = world.player_1.x + 20
+        world.player_1_flash_on = True
         show(world.player_1_flashlight)
     if not world.player_1_flash_on:
         hide(world.player_1_flashlight)
