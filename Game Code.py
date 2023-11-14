@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from designer import *
-
+### Tried to figure out flashlight flip & it wasnt flipping
 PLAYER_SPEED = 10
 
 class MovingEmoji(Emoji):
