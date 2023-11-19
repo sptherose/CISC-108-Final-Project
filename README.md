@@ -24,11 +24,13 @@ Milestone 1 Task List:
 YouTube Link to Demo Video: https://youtu.be/qkW89PEg4mY 
 
 Milestone 2 Task List:
-- [] Add platforms for players to jump on
+- [x] Add platforms for players to jump on
+- [x] Add platform and Player interaction
 - [] Add Bat Objects 
 - [] Add Bat and Player Interactions
-- [] Add Cave Entrance Object
-- [] Add Player and Cave Entrance Interaction
+- [x] Add Cave Entrance Object
+
+YouTube Link to Demo Video: https://youtu.be/Ux0arrWzABA 
 
 Milestone 3 Task List:
 - [] Add Health bar
