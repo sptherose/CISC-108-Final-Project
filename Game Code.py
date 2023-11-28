@@ -8,7 +8,6 @@ class Button:
     background: DesignerObject
     border: DesignerObject
     label: DesignerObject
-
 def make_button(message:str,x:int,y:int) -> Button:
     horizontal_padding = 5
     vertical_padding = 3
@@ -22,12 +21,6 @@ class MovingEmoji(Emoji):
 @dataclass
 class World:
     ground: DesignerObject
-    cave_entrance_1: DesignerObject
-    platforms_L1: DesignerObject
-    beat_L1: False
-    cave_entrance_2: DesignerObject
-    platforms_L2: DesignerObject
-    beat_L2: False
     player_1: MovingEmoji
     player_2: MovingEmoji
     grounded_1: True
@@ -44,8 +37,6 @@ class World:
     player_2_flashlight : DesignerObject
     player_1_flash_on : False
     player_2_flash_on : False
-
-
 @dataclass
 class TitleScreen:
     header: DesignerObject
@@ -60,17 +51,35 @@ def use_title_buttons(world:TitleScreen):
         change_scene('world')
     if colliding_with_mouse(world.quit_button.background):
         quit()
+
 @dataclass
-class BeatLevel1:
+class Level1:
+    cave_entrance_1: DesignerObject
+    platforms_L1: DesignerObject
+    beat_L1: False
+@dataclass
+class Level2:
+    cave_entrance_2: DesignerObject
+    platforms_L2: DesignerObject
+    beat_L2: False
+def create_Level2() -> Level2:
+    return Level2(create_cave_entrance_2(),create_plat_L2(),False)
+@dataclass
+class BeatLevel1Screen:
     background: DesignerObject
     header: DesignerObject
     go_to_L2_Button: Button
     quit_button: Button
-def create_beat_L1_screen() -> BeatLevel1:
-    return BeatLevel1(rectangle("gray",get_width(),get_height()),
-                       text("white","Good Job! You Beat Level 1!",50),
-                       make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
-                       make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
+def create_beat_L1_screen() -> BeatLevel1Screen:
+    return BeatLevel1Screen(rectangle("gray", get_width(), get_height()),
+                            text("white","Good Job! You Beat Level 1!",50),
+                            make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
+                            make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
+def use_beat_L1_buttons(world:BeatLevel1Screen):
+    if colliding_with_mouse(world.go_to_L2_Button.background):
+        change_scene('level2')
+    if colliding_with_mouse(world.quit_button.background):
+        quit()
 def create_ground() -> DesignerObject:
     """ This creates thr ground at bottom of screen"""
     ground = rectangle(color="black",width=get_width()*2,height=40,x=0,y=get_height())
@@ -240,7 +249,8 @@ def keys_not_pressed_p2(world: World, key: str):
     if key == "Up":
         world.player_2_jump = False
 def check_beat_levels(world:World):
-    if colliding(world.player_1,world.cave_entrance_1) and colliding(world.player_2,world.cave_entrance_1):
+    if colliding(world.player_1,world.cave_entrance_1) and colliding(world.player_2,world.cave_entrance_1)\
+            and world.player_1_flash_on and world.player_2_flash_on:
         world.beat_L1 = True
         create_beat_L1_screen()
 def check_groundings(world:World):
@@ -280,20 +290,23 @@ def accelerate_player(world:World):
 def create_world() -> World:
     return World(create_ground(),
                  create_cave_entrance_1(), create_plat_L1(), False,
-                 create_cave_entrance_2(), create_plat_L2(), False,
                  create_player1(), create_player2(),
                  True, True, False, False, False, False, False, False, 0, 0,
                  create_p1_flashlight(), create_p2_flashlight(), False, False)
 
-
 when('starting:title', create_title_screen)
 when('clicking:title',use_title_buttons)
 when('starting:world', create_world)
+
+when('starting:beatLevel1', create_beat_L1_screen)
+when('clicking:beatLevel1',use_beat_L1_buttons)
+when('starting:level2', create_Level2)
+
 when('done typing:world', keys_not_pressed_p1, keys_not_pressed_p2)
 when('typing:world', keys_pressed_p1, keys_pressed_p2, move_player1,move_player2)
 when('updating:world', move_player1, move_player2)
 when ('updating:world',stop_moving_players)
-when ('updating:world',check_beat_levels)
+when ('typing:world',check_beat_levels)
 when('updating:world', check_groundings)
 when('updating:world',accelerate_player)
 debug()
