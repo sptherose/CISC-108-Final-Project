@@ -3,6 +3,19 @@ from designer import *
 
 PLAYER_SPEED = 10
 
+@dataclass
+class Button:
+    background: DesignerObject
+    border: DesignerObject
+    label: DesignerObject
+
+def make_button(message:str,x:int,y:int) -> Button:
+    horizontal_padding = 5
+    vertical_padding = 3
+    label = text("white",message,20,x,y,layer='top')
+    return Button(rectangle("black",label.width + horizontal_padding, label.height + vertical_padding, x, y),
+                  rectangle("white",label.width + horizontal_padding, label.height + vertical_padding, x, y,1),
+                  label)
 class MovingEmoji(Emoji):
     speed: int
     direction: int
@@ -11,6 +24,10 @@ class World:
     ground: DesignerObject
     cave_entrance_1: DesignerObject
     platforms_L1: DesignerObject
+    beat_L1: False
+    cave_entrance_2: DesignerObject
+    platforms_L2: DesignerObject
+    beat_L2: False
     player_1: MovingEmoji
     player_2: MovingEmoji
     grounded_1: True
@@ -28,6 +45,32 @@ class World:
     player_1_flash_on : False
     player_2_flash_on : False
 
+
+@dataclass
+class TitleScreen:
+    header: DesignerObject
+    start_button: Button
+    quit_button: Button
+def create_title_screen() -> TitleScreen:
+    return TitleScreen(text("black","Scandere",50),
+                       make_button("Begin Game", get_width()/2, (get_height()/2 + 50)),
+                       make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
+def use_title_buttons(world:TitleScreen):
+    if colliding_with_mouse(world.start_button.background):
+        change_scene('world')
+    if colliding_with_mouse(world.quit_button.background):
+        quit()
+@dataclass
+class BeatLevel1:
+    background: DesignerObject
+    header: DesignerObject
+    go_to_L2_Button: Button
+    quit_button: Button
+def create_beat_L1_screen() -> BeatLevel1:
+    return BeatLevel1(rectangle("gray",get_width(),get_height()),
+                       text("white","Good Job! You Beat Level 1!",50),
+                       make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
+                       make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def create_ground() -> DesignerObject:
     """ This creates thr ground at bottom of screen"""
     ground = rectangle(color="black",width=get_width()*2,height=40,x=0,y=get_height())
@@ -35,15 +78,27 @@ def create_ground() -> DesignerObject:
 def create_cave_entrance_1() -> DesignerObject:
     cave_entrance_1 = circle(color="black",radius=50,x=70,y=70)
     return cave_entrance_1
-def create_plat1_L1() -> [DesignerObject]:
-    platforms_L1 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80,),
-                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160,),
+def create_cave_entrance_2() -> DesignerObject:
+    cave_entrance_2 = circle(color="black",radius=50,x=70,y=70)
+    return cave_entrance_2
+def create_plat_L1() -> [DesignerObject]:
+    platforms_L1 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
+                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
                     rectangle(color="black",width=100,height=10,x=370,y=get_height()-260),
                     rectangle(color="black",width=100,height=10,x=420,y=get_height()-330),
                     rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
                     rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
                     rectangle(color="black", width=200, height=10, x=70, y=120)]
     return platforms_L1
+def create_plat_L2() -> [DesignerObject]:
+    platforms_L2 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
+                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
+                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-260),
+                    rectangle(color="black",width=100,height=10,x=420,y=get_height()-330),
+                    rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
+                    rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
+                    rectangle(color="black", width=200, height=10, x=70, y=120)]
+    return platforms_L2
 def create_player1() -> MovingEmoji:
     """This creates Player 1 and makes him appear on the bottom left of the screen"""
     player_1 = MovingEmoji('🧍',speed=5,direction=0)
@@ -184,6 +239,10 @@ def keys_not_pressed_p2(world: World, key: str):
         world.player_2_flash_on = False
     if key == "Up":
         world.player_2_jump = False
+def check_beat_levels(world:World):
+    if colliding(world.player_1,world.cave_entrance_1) and colliding(world.player_2,world.cave_entrance_1):
+        world.beat_L1 = True
+        create_beat_L1_screen()
 def check_groundings(world:World):
     if colliding(world.player_1,world.ground):
         world.grounded_1 = True
@@ -219,16 +278,22 @@ def accelerate_player(world:World):
        world.player_2.y += world.player_2.speed
        world.player_2.speed += 10
 def create_world() -> World:
-    return World(create_ground(),create_cave_entrance_1(),create_plat1_L1(),create_player1(), create_player2(),
+    return World(create_ground(),
+                 create_cave_entrance_1(), create_plat_L1(), False,
+                 create_cave_entrance_2(), create_plat_L2(), False,
+                 create_player1(), create_player2(),
                  True, True, False, False, False, False, False, False, 0, 0,
-                 create_p1_flashlight(), create_p2_flashlight(),False,False)
+                 create_p1_flashlight(), create_p2_flashlight(), False, False)
 
 
-when('starting', create_world)
-when('done typing', keys_not_pressed_p1, keys_not_pressed_p2)
-when('typing', keys_pressed_p1, keys_pressed_p2, move_player1,move_player2)
-when('updating', move_player1, move_player2)
-when ('updating',stop_moving_players)
-when('updating', check_groundings)
-when('updating',accelerate_player)
-start()
+when('starting:title', create_title_screen)
+when('clicking:title',use_title_buttons)
+when('starting:world', create_world)
+when('done typing:world', keys_not_pressed_p1, keys_not_pressed_p2)
+when('typing:world', keys_pressed_p1, keys_pressed_p2, move_player1,move_player2)
+when('updating:world', move_player1, move_player2)
+when ('updating:world',stop_moving_players)
+when ('updating:world',check_beat_levels)
+when('updating:world', check_groundings)
+when('updating:world',accelerate_player)
+debug()
