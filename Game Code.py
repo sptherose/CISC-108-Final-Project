@@ -142,7 +142,9 @@ def move_bats_1(level1:Level1):
 def flash_bat_collision_1(level1:Level1):
     scared_bats = []
     for bat in level1.bats:
-        if colliding(bat,level1.player_1_flashlight) or colliding(bat,level1.player_2_flashlight):
+        if colliding(bat,level1.player_1_flashlight) and level1.player_1_flash_on:
+            scared_bats.append(bat)
+        if colliding(bat,level1.player_2_flashlight) and level1.player_2_flash_on:
             scared_bats.append(bat)
     level1.bats = destroy_bats(level1.bats,scared_bats)
 def player_bat_collision_1(level1:Level1):
