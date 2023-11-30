@@ -31,12 +31,11 @@ Milestone 2 Task List:
 YouTube Link to Demo Video: https://youtu.be/Ux0arrWzABA 
 
 Milestone 3 Task List:
-- [] Add Bat Objects 
-- [] Add Bat and Player Interactions
-- [] Add Health bar
+- [x] Add Bat Objects 
+- [x] Add Bat and Player Interactions
+- [x] Add Health bar
 - [] Add Timer
-- [] Add Game Over Screen
-    (Displays Empty Health bar and Timer and Play Again Button when player dies)
+- [x] Add Game Over Screen
 - [] Add Level Completion Screen
     (Displays Timer and Remaining Health and Next Level Button When each level is beat)
 - [] Add Game Completion Screen
