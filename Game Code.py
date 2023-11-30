@@ -78,6 +78,7 @@ class TitleScreen:
     start_button: Button
     quit_button: Button
 def create_title_screen() -> TitleScreen:
+    set_background_image('https://img.freepik.com/free-vector/entrance-cave-mountain-with-empty-space_107791-9092.jpg?w=2000&t=st=1701373813~exp=1701374413~hmac=3e18601fcf8632cc5d4f240c3fc30cbc94ab5cf0478dc8f328c75730dff62528')
     return TitleScreen(text("black","Scandere",50),
                        make_button("Begin Game", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
@@ -88,25 +89,26 @@ def use_title_buttons(world:TitleScreen):
         quit()
 @dataclass
 class EndScreen:
-    background: DesignerObject
     header: DesignerObject
     quit_button: Button
 def create_end_screen() -> EndScreen:
-    return EndScreen(rectangle("gray",get_width(),get_height()),
-                     text("black","You Died :D",50),
-                       make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
+    set_background_image(
+        'https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279')
+    return EndScreen(text("black","You Died :P",50),
+                     make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def use_end_buttons(world:EndScreen):
     if colliding_with_mouse(world.quit_button.background):
         quit()
 
 @dataclass
 class BeatLevel1:
-    background: DesignerObject
+    #background: DesignerObject
     header: DesignerObject
     go_to_L2_Button: Button
     quit_button: Button
 def create_beat_L1_screen() -> BeatLevel1:
-    return BeatLevel1(rectangle("gray",get_width(),get_height()),
+    set_background_image('https://i.redd.it/kdobli2akyh61.jpg')
+    return BeatLevel1(
                        text("white","Good Job! You Beat Level 1!",50),
                        make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
@@ -173,8 +175,8 @@ def destroy_bats(scene_bats:[DesignerObject], remove_bats:[DesignerObject]) -> [
             keep_bats.append(bat)
     return keep_bats
 def display_health() -> [DesignerObject]:
-    healths = [text("black","Player 1 Health: " ,20,(get_width()-100),20),
-               text("black","Player 2 Health: ",20,(get_width()-100),40)]
+    healths = [text("white","Player 1 Health: " ,20,(get_width()-100),20),
+               text("white","Player 2 Health: ",20,(get_width()-100),40)]
     return healths
 def update_health(level1:Level1):
     for health in level1.healths:
@@ -220,6 +222,7 @@ def create_p1_flashlight() -> DesignerObject:
     player_1_flashlight = emoji("🔦")
     grow(player_1_flashlight, -1 / 2)
     turn_left(player_1_flashlight, 45)
+    player_1_flashlight.flip_x = False
     hide(player_1_flashlight)
     return player_1_flashlight
 def move_right_p1(world: Level1):
@@ -232,7 +235,6 @@ def move_left_p1(world: Level1):
     world.player_1_direction = "left"
 def move_up_p1(world:Level1):
     world.player_1.speed += -30
-
 def stop_moving_players(world:Level1):
     """This function prevents Players 1 and 2 from running off of the screen"""
     if world.player_1.x == get_width():
@@ -309,9 +311,11 @@ def create_p2_flashlight() -> DesignerObject:
 def move_right_p2(world: Level1):
     """This function moves Player 2 to the right when it get's called"""
     world.player_2_speed = PLAYER_SPEED
+    world.player_2_direction = "right"
 def move_left_p2(world: Level1):
     """This function moves Player 2 to the left when it get's called"""
     world.player_2_speed = -PLAYER_SPEED
+    world.player_2_direction = "left"
 def move_up_p2(world:Level1):
     world.player_2.speed += -30
 def move_player2(world: Level1, key: str):
@@ -329,8 +333,12 @@ def move_player2(world: Level1, key: str):
             move_up_p2(world)
             world.player_2.y += world.player_2.speed
     if world.player_2_flash_on:
-        world.player_2_flashlight.y = world.player_2.y + 5
-        world.player_2_flashlight.x = world.player_2.x + 20
+        if world.player_2_direction == "right":
+            world.player_2_flashlight.y = world.player_2.y + 5
+            world.player_2_flashlight.x = world.player_2.x + 20
+        if world.player_2_direction == "left":
+            world.player_2_flashlight.y = world.player_2.y + 5
+            world.player_2_flashlight.x = world.player_2.x - 20
         show(world.player_2_flashlight)
     if not world.player_2_flash_on:
         hide(world.player_2_flashlight)
@@ -397,6 +405,8 @@ def accelerate_player(world:Level1):
        world.player_2.y += world.player_2.speed
        world.player_2.speed += 10
 def create_level1() -> Level1:
+    set_background_image(
+        'https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279')
     return Level1(create_ground(),
                   create_cave_entrance_1(), create_plat_L1(), False,
                   create_player1(), create_player2(), 3,3,display_health(),

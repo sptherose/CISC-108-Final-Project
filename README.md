@@ -34,10 +34,11 @@ Milestone 3 Task List:
 - [x] Add Bat Objects 
 - [x] Add Bat and Player Interactions
 - [x] Add Health bar
-- [] Add Timer
 - [x] Add Game Over Screen
-- [] Add Level Completion Screen
-    (Displays Timer and Remaining Health and Next Level Button When each level is beat)
+- [x] Add Level Completion Screen
+    (Displays Next Level Button When each level is beat)
 - [] Add Game Completion Screen
     (Displays Total Time when the game is beaten)
+- [x] Add Game Lost Screen
+    (Displays Quit Game Button)
 - [] Add a way to gain back health (this addition is subject to difficulty found when testing)
