@@ -38,6 +38,8 @@ class Level1:
     player_2_left: False
     player_1_right: False
     player_2_right: False
+    player_1_direction:str
+    player_2_direction:str
     player_1_jump: False
     player_2_jump: False
     player_1_speed: int
@@ -108,6 +110,11 @@ def create_beat_L1_screen() -> BeatLevel1:
                        text("white","Good Job! You Beat Level 1!",50),
                        make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
+def use_beat_L1_buttons(world:BeatLevel1):
+    if colliding_with_mouse(world.go_to_L2_Button.background):
+        change_scene('title')
+    if colliding_with_mouse(world.quit_button.background):
+        quit()
 def create_ground() -> DesignerObject:
     """ This creates thr ground at bottom of screen"""
     ground = rectangle(color="black",width=get_width()*2,height=40,x=0,y=get_height())
@@ -148,15 +155,15 @@ def flash_bat_collision_1(level1:Level1):
             scared_bats.append(bat)
     level1.bats = destroy_bats(level1.bats,scared_bats)
 def player_bat_collision_1(level1:Level1):
-   # remove_bats = []
+    remove_bats = []
     for bat in level1.bats:
         if colliding(bat,level1.player_1):
             level1.player_1_health -= 1
+            remove_bats.append(bat)
         if colliding(bat,level1.player_2):
             level1.player_2_health -= 1
-        #if colliding(bat,level1.player_1) or colliding(bat,level1.player_2):
-          #  remove_bats.append(bat)
-    #destroy_bats(level1.bats,remove_bats)
+            remove_bats.append(bat)
+    level1.bats = destroy_bats(level1.bats,remove_bats)
 def destroy_bats(scene_bats:[DesignerObject], remove_bats:[DesignerObject]) -> [DesignerObject]:
     keep_bats = []
     for bat in scene_bats:
@@ -218,9 +225,11 @@ def create_p1_flashlight() -> DesignerObject:
 def move_right_p1(world: Level1):
     """This function moves Player 1 to the right when it gets called"""
     world.player_1_speed = PLAYER_SPEED
+    world.player_1_direction = "right"
 def move_left_p1(world: Level1):
     """This function moves Player 1 to the left when it gets called"""
     world.player_1_speed = -PLAYER_SPEED
+    world.player_1_direction = "left"
 def move_up_p1(world:Level1):
     world.player_1.speed += -30
 
@@ -249,8 +258,12 @@ def move_player1(world: Level1, key: str):
             move_up_p1(world)
             world.player_1.y += world.player_1.speed
     if world.player_1_flash_on:
-        world.player_1_flashlight.y = world.player_1.y + 5
-        world.player_1_flashlight.x = world.player_1.x + 20
+        if world.player_1_direction == "right":
+            world.player_1_flashlight.y = world.player_1.y + 5
+            world.player_1_flashlight.x = world.player_1.x + 20
+        if world.player_1_direction == "left":
+            world.player_1_flashlight.y = world.player_1.y + 5
+            world.player_1_flashlight.x = world.player_1.x - 20
         show(world.player_1_flashlight)
     if not world.player_1_flash_on:
         hide(world.player_1_flashlight)
@@ -348,7 +361,7 @@ def keys_not_pressed_p2(world: Level1, key: str):
 def check_beat_levels(world:Level1):
     if colliding(world.player_1,world.cave_entrance_1) and colliding(world.player_2,world.cave_entrance_1):
         world.beat_L1 = True
-        create_beat_L1_screen()
+        change_scene('beatL1')
 def check_groundings(world:Level1):
     if colliding(world.player_1,world.ground):
         world.grounded_1 = True
@@ -387,7 +400,7 @@ def create_level1() -> Level1:
     return Level1(create_ground(),
                   create_cave_entrance_1(), create_plat_L1(), False,
                   create_player1(), create_player2(), 3,3,display_health(),
-                  True, True, False, False, False, False, False, False, 0, 0,
+                  True, True, False, False, False, False, "right","right",False, False, 0, 0,
                   create_p1_flashlight(), create_p2_flashlight(), False, False,
                   [])
 
@@ -406,4 +419,6 @@ when('updating:level1', spawn_bats_1, move_bats_1, move_bats_1, flash_bat_collis
 when('updating:level1',update_health, lost_game)
 when('starting:endscreen',create_end_screen)
 when('clicking:endscreen',use_end_buttons)
+when('starting:beatL1',create_beat_L1_screen)
+when('clicking:beatL1',use_beat_L1_buttons)
 debug()
