@@ -173,26 +173,26 @@ def create_cave_entrance_1() -> DesignerObject:
 
 def create_bat() -> DesignerObject:
     bat = emoji("bat")
-    bat.x = get_width()
+    bat.x = choice([0,get_width()])
     bat.y = randint(0,get_height())
     return bat
 def spawn_bats_1(level1:Level1) -> [DesignerObject]:
     good_num_bats = len(level1.bats) < 4
-    if good_num_bats and randint(1,150) == 120:
+    if good_num_bats and randint(1,125) == 120:
         level1.bats.append(create_bat())
 def move_bats_1(level1:Level1):
     for bat in level1.bats:
         target = choice([level1.player_1, level1.player_2])
-        point_towards(bat,target)
+        #point_towards(bat,target)
         target_x = target.x
         target_y = target.y
-        if (bat.x > target_x):
+        if bat.x > target_x:
             bat.x += -1
-        else:
+        if bat.x < target_x:
             bat.x += 1
-        if (bat.y > target_y):
+        if bat.y > target_y:
             bat.y += -1
-        else:
+        if bat.y < target_y:
             bat.y += 1
 def flash_bat_collision_1(level1:Level1):
     scared_bats = []
@@ -238,19 +238,19 @@ def create_cave_entrance_2() -> DesignerObject:
     cave_entrance_2 = circle(color="black",radius=50,x=70,y=70)
     return cave_entrance_2
 def create_plat_L1() -> [DesignerObject]:
-    platforms_L1 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
-                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
-                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-260),
-                    rectangle(color="black",width=100,height=10,x=420,y=get_height()-330),
-                    rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
+    platforms_L1 = [rectangle(color="black",width=80,height=10,x=515,y=get_height()-80),
+                    rectangle(color="black",width=340,height=10,x=290,y=get_height()-170),
+                    rectangle(color="black",width=100,height=10,x=300,y=get_height()-250),
+                    rectangle(color="black",width=50,height=10,x=400,y=get_height()-320),
+                    rectangle(color="black", width=100, height=10, x=370, y=get_height() - 430),
                     rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
                     rectangle(color="black", width=200, height=10, x=70, y=120)]
     return platforms_L1
 def create_plat_L2() -> [DesignerObject]:
     platforms_L2 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
                     rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
-                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-260),
-                    rectangle(color="black",width=100,height=10,x=420,y=get_height()-330),
+                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-275),
+                    rectangle(color="black",width=100,height=10,x=550,y=get_height()-330),
                     rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
                     rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
                     rectangle(color="black", width=200, height=10, x=70, y=120)]
@@ -309,14 +309,14 @@ def move_player1(world: Level1, key: str):
         if world.player_1_direction == "right":
             world.player_1_flashlight.y = world.player_1.y + 5
             world.player_1_flashlight.x = world.player_1.x + 20
+            #world.player_1_flashlight.flip_x = False
         if world.player_1_direction == "left":
             world.player_1_flashlight.y = world.player_1.y + 5
             world.player_1_flashlight.x = world.player_1.x - 20
+            #world.player_1_flashlight.flip_x = True
         show(world.player_1_flashlight)
     if not world.player_1_flash_on:
         hide(world.player_1_flashlight)
-       # light_beam1 = rectangle('yellow', 2, 10, x=flashlight1.x, y=flashlight1.y)
-       # draw(light_beam1)
 def keys_pressed_p1(world: Level1, key: str):
     """This function checks if the key is still being pressed
     so that Player 1 keeps moving or keeps shining light while the key is being held"""
@@ -355,7 +355,7 @@ def create_p2_flashlight() -> DesignerObject:
     hide(player_2_flashlight)
     return player_2_flashlight
 def move_right_p2(world: Level1):
-    """This function moves Player 2 to the right when it get's called"""
+    """This function moves Player 2 to the right when it gets called"""
     world.player_2_speed = PLAYER_SPEED
     world.player_2_direction = "right"
 def move_left_p2(world: Level1):
@@ -416,6 +416,11 @@ def check_beat_levels(world:Level1):
     if colliding(world.player_1,world.cave_entrance_1) and colliding(world.player_2,world.cave_entrance_1):
         world.beat_L1 = True
         change_scene('beatL1')
+def collision(player:MovingEmoji, platform:DesignerObject) -> bool:
+    feet = player.y - player.height//2
+    top = platform.y + platform.height//2
+    return feet == top
+
 def check_groundings(world:Level1):
     if colliding(world.player_1,world.ground):
         world.grounded_1 = True
@@ -425,7 +430,8 @@ def check_groundings(world:Level1):
         world.grounded_1 = False
         for platform_L1 in world.platforms_L1:
             if colliding(world.player_1,platform_L1):
-                world.player_1.y = platform_L1.y-30
+            #if collision(world.player_1, platform_L1) and colliding(world.player_1, platform_L1):
+                world.player_1.y = platform_L1.y - 30
                 world.grounded_1 = True
     if colliding(world.player_2,world.ground):
         world.grounded_2 = True
