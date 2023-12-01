@@ -12,6 +12,16 @@ class Button:
     label: DesignerObject
 
 def make_button(message:str,x:int,y:int) -> Button:
+    '''
+    This function creates a button with the given text and a border and background and outline
+    Args:
+        message(str): the text that appears on the button
+        x(int): the x position of the button
+        y(int): the y position of the button
+    Returns:
+        Button: the button will have an outline of 5x3 pixels and a black rectangular background with
+        text layered above the background at the assigned (x,y) coordinates
+    '''
     horizontal_padding = 5
     vertical_padding = 3
     label = text("white",message,20,x,y,layer='top')
@@ -78,11 +88,23 @@ class TitleScreen:
     start_button: Button
     quit_button: Button
 def create_title_screen() -> TitleScreen:
+    '''
+    This function creates the title screen that will appear when game starts
+    Returns:
+        TitleScreen: this function sets the background image and then creates a title screen with the name of the game in black at size 50,
+        and 2 buttons, one to start the game, and another that lets the player quit the game
+    '''
     set_background_image('https://img.freepik.com/free-vector/entrance-cave-mountain-with-empty-space_107791-9092.jpg?w=2000&t=st=1701373813~exp=1701374413~hmac=3e18601fcf8632cc5d4f240c3fc30cbc94ab5cf0478dc8f328c75730dff62528')
     return TitleScreen(text("black","Scandere",50),
                        make_button("Begin Game", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def use_title_buttons(world:TitleScreen):
+    '''
+    This function makes the buttons that appear on the title screen clickable and makes the buttons perform the
+    appropriate actions
+    Args:
+        world(TitleScreen): the scene that the game is currently at, which is the title screen
+    '''
     if colliding_with_mouse(world.start_button.background):
         change_scene('level1')
     if colliding_with_mouse(world.quit_button.background):
@@ -92,11 +114,23 @@ class EndScreen:
     header: DesignerObject
     quit_button: Button
 def create_end_screen() -> EndScreen:
+    '''
+    This function creates the eng screen that will appear when the player loses the game
+    Returns:
+        EndScreen: this function sets the background image and then creates a game over screen with
+         one button that lets the player quit the game and text saying the player died
+    '''
     set_background_image(
         'https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279')
     return EndScreen(text("black","You Died :P",50),
                      make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def use_end_buttons(world:EndScreen):
+    '''
+        This function makes the button that appears on the end screen clickable and makes the button perform the
+        appropriate action
+        Args:
+            world(EndScreen): the scene that the game is currently at, which is the game over screen
+        '''
     if colliding_with_mouse(world.quit_button.background):
         quit()
 
@@ -107,12 +141,24 @@ class BeatLevel1:
     go_to_L2_Button: Button
     quit_button: Button
 def create_beat_L1_screen() -> BeatLevel1:
+    '''
+    This function creates the level 1 completion screen that will appear when the players beat the first level
+    Returns:
+        BeatLevel1: this function sets the background image and then text stating the players beat level 1,
+        and 2 buttons, one to go to the next level, and another that lets the player quit the game
+    '''
     set_background_image('https://i.redd.it/kdobli2akyh61.jpg')
     return BeatLevel1(
                        text("white","Good Job! You Beat Level 1!",50),
                        make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def use_beat_L1_buttons(world:BeatLevel1):
+    '''
+        This function makes the buttons that appear on the level completion screen clickable and makes the buttons
+        perform the appropriate actions
+        Args:
+            world(BeatLevel1): the scene that the game is currently at, which is the level 1 completed screen
+        '''
     if colliding_with_mouse(world.go_to_L2_Button.background):
         change_scene('title')
     if colliding_with_mouse(world.quit_button.background):
@@ -237,21 +283,21 @@ def move_up_p1(world:Level1):
     world.player_1.speed += -30
 def stop_moving_players(world:Level1):
     """This function prevents Players 1 and 2 from running off of the screen"""
-    if world.player_1.x == get_width():
-        world.player_1_speed = 0
-    if world.player_1.x == 0:
-        world.player_1_speed = 0
-    if world.player_2.x == get_width():
-        world.player_2_speed = 0
-    if world.player_2.x == 0:
-        world.player_2_speed = 0
+    if world.player_1.x > get_width():
+        world.player_1.x = get_width()
+    if world.player_1.x < 0:
+        world.player_1.x = 0
+    if world.player_2.x > get_width():
+        world.player_2.x = get_width()
+    if world.player_2.x < 0:
+        world.player_2.x = 0
 def move_player1(world: Level1, key: str):
     """This function takes in the key being pressed and makes Player 1 move accordingly,
     calling the appropriate helper functions"""
     world.player_1.x += world.player_1_speed
-    if world.player_1_left and world.player_1.x > 0:
+    if world.player_1_left:
         move_left_p1(world)
-    if world.player_1_right and world.player_1.x < get_width():
+    if world.player_1_right:
         move_right_p1(world)
     if not world.player_1_left and not world.player_1_right:
         world.player_1_speed = 0
@@ -299,7 +345,7 @@ def create_player2() -> MovingEmoji:
     grow(player_2, 2)
     player_2.y = get_height() - 40
     player_2.x = 20
-    player_2.flip_x = False
+    #player_2.flip_x = False
     return player_2
 def create_p2_flashlight() -> DesignerObject:
     """This creates Player 1's flashlight that will appear when the function gets called"""
@@ -418,11 +464,11 @@ def create_level1() -> Level1:
 when('starting:title', create_title_screen)
 when('clicking:title',use_title_buttons)
 when('starting:level1', create_level1)
-when('done typing:level1', keys_not_pressed_p1, keys_not_pressed_p2)
 when('typing:level1', keys_pressed_p1, keys_pressed_p2)
+when('done typing:level1', keys_not_pressed_p1, keys_not_pressed_p2)
 when('updating:level1', move_player1, move_player2)
-when ('updating:level1',stop_moving_players)
-when ('updating:level1',check_beat_levels)
+when('updating:level1',stop_moving_players)
+when('updating:level1',check_beat_levels)
 when('updating:level1', check_groundings)
 when('updating:level1',accelerate_player)
 when('updating:level1', spawn_bats_1, move_bats_1, move_bats_1, flash_bat_collision_1,player_bat_collision_1)
