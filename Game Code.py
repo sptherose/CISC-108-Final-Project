@@ -7,6 +7,13 @@ PLAYER_SPEED = 10
 
 @dataclass
 class Button:
+    '''
+    This is a button that the player will be able to click in order to change scenes
+    Attributes:
+        background(DesignerObject): background of the button
+        border(DesignerObject): border surrounding the button's border
+        label(DesignerObject): the text appearing on the button
+    '''
     background: DesignerObject
     border: DesignerObject
     label: DesignerObject
@@ -29,61 +36,81 @@ def make_button(message:str,x:int,y:int) -> Button:
                   rectangle("white",label.width + horizontal_padding, label.height + vertical_padding, x, y,1),
                   label)
 class MovingEmoji(Emoji):
+    '''
+     This is the type that the players are as it has a set speed that gravity will affect
+     Attributes:
+         speed(int): the speed the players y coordinate will move at
+         direction(int): the direction the players are moving
+     '''
     speed: int
     direction: int
 @dataclass
 class Level1:
+    '''
+     This is the first level of the game
+     Attributes:
+         ground(DesignerObject): the rectangle representing the ground at the bottom of the level
+         cave_entrance_1(DesignerObject): the circle at top of the level that the players will want to reach
+         platforms_L1(List[DesignerObject]): list of rectangles to serve as platforms for players to land on
+         beat_L1(bool): whether or not the first level was completed
+         player_1(MovingEmoji): the first player
+         player_2(MovingEmoji): the second player
+         player_1_health(int): how much health the first player has
+         player_2_health(int): how much health the second player has
+         healths(List[DesignerObject]): the health status section at top right displaying 2 healths, 1 for each player
+         grounded_1(bool): whether or not player 1 is on the ground
+         grounded_2(bool): whether or not player 2 is on the ground
+         player_1_left(bool): whether or not the user is making player 1 move left
+         player_2_left(bool): whether or not the user is making player 2 move left
+         player_1_right(bool): whether or not the user is making player 1 move right
+         player_2_right(bool): whether or not the user is making player 2 move right
+         player_1_direction(str): the direction player 1 was last moving in
+         player_2_direction(str): the direction player 2 was last moving in
+         player_1_jump(bool): whether or not the user is making player 1 jump
+         player_2_jump(bool): whether or not the user is making player 2 jump
+         player_1_speed(int): the speed at which player 1 is moving left or right (positive or negative PLAYER SPEED)
+         player_2_speed(int): the speed at which player 1 is moving left or right (positive or negative PLAYER SPEED)
+         player_1_flashlight(DesignerObject): the flashlight that will player 1 can control
+         player_2_flashlight(DesignerObject): the flashlight that will player 2 can control
+         player_1_flash_on(bool): whether or not the user is making player 1's flashlight appear
+         player_2_flash_on(bool): whether or not the user is making player 2's flashlight appear
+         bats(List[DesignerObject]): the bats that are in the level
+     '''
     ground: DesignerObject
     cave_entrance_1: DesignerObject
-    platforms_L1: DesignerObject
-    beat_L1: False
+    platforms_L1: [DesignerObject]
+    beat_L1: bool
     player_1: MovingEmoji
     player_2: MovingEmoji
     player_1_health: int
     player_2_health:int
     healths: [DesignerObject]
-    grounded_1: True
-    grounded_2: True
-    player_1_left: False
-    player_2_left: False
-    player_1_right: False
-    player_2_right: False
+    grounded_1: bool
+    grounded_2: bool
+    player_1_left: bool
+    player_2_left: bool
+    player_1_right: bool
+    player_2_right: bool
     player_1_direction:str
     player_2_direction:str
-    player_1_jump: False
-    player_2_jump: False
+    player_1_jump: bool
+    player_2_jump: bool
     player_1_speed: int
     player_2_speed: int
-    player_1_flashlight : DesignerObject
-    player_2_flashlight : DesignerObject
-    player_1_flash_on : False
-    player_2_flash_on : False
+    player_1_flashlight: DesignerObject
+    player_2_flashlight: DesignerObject
+    player_1_flash_on: bool
+    player_2_flash_on: bool
     bats: [DesignerObject]
 @dataclass
-class Level2:
-    ground: DesignerObject
-    cave_entrance_2: DesignerObject
-    platforms_L2: DesignerObject
-    beat_L2: False
-    player_1: MovingEmoji
-    player_2: MovingEmoji
-    grounded_1: True
-    grounded_2: True
-    player_1_left: False
-    player_2_left: False
-    player_1_right: False
-    player_2_right: False
-    player_1_jump: False
-    player_2_jump: False
-    player_1_speed: int
-    player_2_speed: int
-    player_1_flashlight : DesignerObject
-    player_2_flashlight : DesignerObject
-    player_1_flash_on : False
-    player_2_flash_on : False
-
-@dataclass
 class TitleScreen:
+    '''
+    This is the title screen
+    Attributes:
+        header(DesignerObject): a text box
+        start_button(Button): a button that can be clicked to begin the game
+        quit_button(Button): a button that can be clicked to close the game
+    '''
     header: DesignerObject
     start_button: Button
     quit_button: Button
@@ -136,9 +163,15 @@ def use_end_buttons(world:EndScreen):
 
 @dataclass
 class BeatLevel1:
-    #background: DesignerObject
+    '''
+    This is the title screen
+    Attributes:
+        header(DesignerObject): a text box
+        restart_button(Button): a button that can be clicked to go back to the title screen
+        quit_button(Button): a button that can be clicked to close the game
+    '''
     header: DesignerObject
-    go_to_L2_Button: Button
+    restart_button: Button
     quit_button: Button
 def create_beat_L1_screen() -> BeatLevel1:
     '''
@@ -150,7 +183,7 @@ def create_beat_L1_screen() -> BeatLevel1:
     set_background_image('https://i.redd.it/kdobli2akyh61.jpg')
     return BeatLevel1(
                        text("white","Good Job! You Beat Level 1!",50),
-                       make_button("Begin Level 2", get_width()/2, (get_height()/2 + 50)),
+                       make_button("Return to Title Screen", get_width()/2, (get_height()/2 + 50)),
                        make_button("Quit Game", get_width()/2, (get_height()/2) + 100))
 def use_beat_L1_buttons(world:BeatLevel1):
     '''
@@ -159,7 +192,7 @@ def use_beat_L1_buttons(world:BeatLevel1):
         Args:
             world(BeatLevel1): the scene that the game is currently at, which is the level 1 completed screen
         '''
-    if colliding_with_mouse(world.go_to_L2_Button.background):
+    if colliding_with_mouse(world.restart_button.background):
         change_scene('title')
     if colliding_with_mouse(world.quit_button.background):
         quit()
@@ -233,10 +266,6 @@ def update_health(level1:Level1):
 def lost_game(level1:Level1):
     if level1.player_1_health == 0 or level1.player_2_health == 0:
         change_scene('endscreen')
-
-def create_cave_entrance_2() -> DesignerObject:
-    cave_entrance_2 = circle(color="black",radius=50,x=70,y=70)
-    return cave_entrance_2
 def create_plat_L1() -> [DesignerObject]:
     platforms_L1 = [rectangle(color="black",width=80,height=10,x=515,y=get_height()-80),
                     rectangle(color="black",width=340,height=10,x=290,y=get_height()-170),
@@ -246,25 +275,23 @@ def create_plat_L1() -> [DesignerObject]:
                     rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
                     rectangle(color="black", width=200, height=10, x=70, y=120)]
     return platforms_L1
-def create_plat_L2() -> [DesignerObject]:
-    platforms_L2 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
-                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
-                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-275),
-                    rectangle(color="black",width=100,height=10,x=550,y=get_height()-330),
-                    rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
-                    rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
-                    rectangle(color="black", width=200, height=10, x=70, y=120)]
-    return platforms_L2
 def create_player1() -> MovingEmoji:
-    """This creates Player 1 and makes him appear on the bottom left of the screen"""
+    '''
+    This creates Player 1 and makes him appear on the bottom left of the screen
+    Return:
+        MovingEmoji: an emoji to represent the player that has speed of 5 (needed for gravity later) and direction of 0
+    '''
     player_1 = MovingEmoji('🧍',speed=5,direction=0)
     grow(player_1, 2)
     player_1.y = get_height()-40
     player_1.x = 12
-    player_1.flip_x = False
     return player_1
 def create_p1_flashlight() -> DesignerObject:
-    """This creates Player 1's flashlight that will appear when the function gets called"""
+    '''
+    This creates Player 1's flashlight that will appear when the function gets called
+    Return:
+        DesignerObject: a flashlight emoji that begins as hidden
+    '''
     player_1_flashlight = emoji("🔦")
     grow(player_1_flashlight, -1 / 2)
     turn_left(player_1_flashlight, 45)
@@ -272,17 +299,29 @@ def create_p1_flashlight() -> DesignerObject:
     hide(player_1_flashlight)
     return player_1_flashlight
 def move_right_p1(world: Level1):
-    """This function moves Player 1 to the right when it gets called"""
+    '''
+    This function moves Player 1 to the right when it gets called
+    Args:
+        world(Level1): the current scene in order to access player 1's speed and direction
+    '''
     world.player_1_speed = PLAYER_SPEED
     world.player_1_direction = "right"
 def move_left_p1(world: Level1):
-    """This function moves Player 1 to the left when it gets called"""
+    '''
+    This function moves Player 1 to the left when it gets called
+    Args:
+        world(Level1): the current scene in order to access player 1's speed and direction
+    '''
     world.player_1_speed = -PLAYER_SPEED
     world.player_1_direction = "left"
 def move_up_p1(world:Level1):
     world.player_1.speed += -30
 def stop_moving_players(world:Level1):
-    """This function prevents Players 1 and 2 from running off of the screen"""
+    '''
+    This function prevents Players 1 and 2 from running off of the screen
+    Args:
+        world(Level1): the current scene in order to access the players' x location
+    '''
     if world.player_1.x > get_width():
         world.player_1.x = get_width()
     if world.player_1.x < 0:
@@ -291,9 +330,13 @@ def stop_moving_players(world:Level1):
         world.player_2.x = get_width()
     if world.player_2.x < 0:
         world.player_2.x = 0
-def move_player1(world: Level1, key: str):
-    """This function takes in the key being pressed and makes Player 1 move accordingly,
-    calling the appropriate helper functions"""
+def move_player1(world: Level1):
+    '''
+    This function takes in the key being pressed and makes Player 1 move accordingly,
+    calling the appropriate helper functions
+    Args:
+        world(Level1): the current scene in order to access player 1's speed, location, and when it's being controlled
+    '''
     world.player_1.x += world.player_1_speed
     if world.player_1_left:
         move_left_p1(world)
@@ -318,8 +361,13 @@ def move_player1(world: Level1, key: str):
     if not world.player_1_flash_on:
         hide(world.player_1_flashlight)
 def keys_pressed_p1(world: Level1, key: str):
-    """This function checks if the key is still being pressed
-    so that Player 1 keeps moving or keeps shining light while the key is being held"""
+    '''
+    This function checks if the key is still being pressed
+    so that Player 1 keeps moving or keeps shining light while the key is being held
+    Args:
+        world(Level1): the current scene appearing on the screen
+        key(str): the key that the user is pressing on their keyboard
+    '''
     if key == "A":
         world.player_1_left = True
     if key == "D":
@@ -329,8 +377,13 @@ def keys_pressed_p1(world: Level1, key: str):
     if key == "W":
         world.player_1_jump = True
 def keys_not_pressed_p1(world: Level1, key: str):
-    """This function checks if the key has been released
-        so that Player 1 stops moving or shining light while the key no longer being held"""
+    '''
+    This function checks if the key has been released
+    so that Player 1 stops moving or shining light while the key no longer being held
+    Args:
+        world(Level1): the current scene appearing on the screen
+        key(str): the key that the user is not pressing on their keyboard
+    '''
     if key == "A":
         world.player_1_left = False
     if key == "D":
@@ -340,7 +393,11 @@ def keys_not_pressed_p1(world: Level1, key: str):
     if key == "W":
         world.player_1_jump = False
 def create_player2() -> MovingEmoji:
-    """This creates Player 2 and makes him appear on the bottom left of the screen"""
+    '''
+    This creates Player 2 and makes him appear on the bottom left of the screen
+    Return:
+        MovingEmoji: an emoji to represent the player that has speed of 5 (needed for gravity later) and direction of 0
+    '''
     player_2 = MovingEmoji('🧍',speed=5,direction=0)
     grow(player_2, 2)
     player_2.y = get_height() - 40
@@ -348,25 +405,46 @@ def create_player2() -> MovingEmoji:
     #player_2.flip_x = False
     return player_2
 def create_p2_flashlight() -> DesignerObject:
-    """This creates Player 1's flashlight that will appear when the function gets called"""
+    '''
+    This creates Player 2's flashlight that will appear when the function gets called
+    Return:
+        DesignerObject: a flashlight emoji that begins as hidden
+    '''
     player_2_flashlight = emoji("🔦")
     grow(player_2_flashlight, -1 / 2)
     turn_left(player_2_flashlight, 45)
     hide(player_2_flashlight)
     return player_2_flashlight
 def move_right_p2(world: Level1):
-    """This function moves Player 2 to the right when it gets called"""
+    '''
+    This function moves Player 2 to the right when it gets called
+    Args:
+        world(Level1): the current scene in order to access player 2's speed and direction
+    '''
     world.player_2_speed = PLAYER_SPEED
     world.player_2_direction = "right"
 def move_left_p2(world: Level1):
-    """This function moves Player 2 to the left when it get's called"""
+    '''
+    This function moves Player 2 to the left when it gets called
+    Args:
+        world(Level1): the current scene in order to access player 2's speed and direction
+    '''
     world.player_2_speed = -PLAYER_SPEED
     world.player_2_direction = "left"
 def move_up_p2(world:Level1):
+    '''
+    This function moves Player 2 up when it gets called to serve as a jump
+    Args:
+        world(Level1): the current scene in order to access player 2's speed
+    '''
     world.player_2.speed += -30
-def move_player2(world: Level1, key: str):
-    """This function takes in the key being pressed and makes Player 2 move accordingly,
-        calling the appropriate helper functions"""
+def move_player2(world: Level1):
+    '''
+    This function takes in the key being pressed and makes Player 2 move accordingly,
+    calling the appropriate helper functions
+    Args:
+        world(Level1): the current scene in order to access player 2's speed, location, and when it's being controlled
+    '''
     world.player_2.x += world.player_2_speed
     if world.player_2_left and world.player_2.x > 0:
         move_left_p2(world)
@@ -388,11 +466,14 @@ def move_player2(world: Level1, key: str):
         show(world.player_2_flashlight)
     if not world.player_2_flash_on:
         hide(world.player_2_flashlight)
-    # light_beam2 = rectangle('yellow', 2, 10)
-    # draw(light_beam2)
 def keys_pressed_p2(world: Level1, key: str):
-    """This function checks if the key is still being pressed
-       so that Player 2 keeps moving or flashing light while the key is being held"""
+    '''
+    This function checks if the key is still being pressed
+    so that Player 2 keeps moving or keeps shining light while the key is being held
+    Args:
+        world(Level1): the current scene appearing on the screen
+        key(str): the key that the user is pressing on their keyboard
+    '''
     if key == "Left":
         world.player_2_left = True
     if key == "Right":
@@ -402,8 +483,13 @@ def keys_pressed_p2(world: Level1, key: str):
     if key == "Up":
         world.player_2_jump = True
 def keys_not_pressed_p2(world: Level1, key: str):
-    """This function checks if the key has been released
-        so that Player 1 stops moving or flashing light while the key no longer being held"""
+    '''
+     This function checks if the key has been released
+     so that Player 2 stops moving or shining light while the key no longer being held
+     Args:
+         world(Level1): the current scene appearing on the screen
+         key(str): the key that the user is not pressing on their keyboard
+     '''
     if key == "Left":
         world.player_2_left = False
     if key == "Right":
@@ -444,18 +530,25 @@ def check_groundings(world:Level1):
                 world.player_2.y = platform_L1.y-30
                 world.grounded_2 = True
 def accelerate_player(world:Level1):
-   if world.grounded_1:
+    '''
+    This function simulates gravity, making the player fall faster the longer they are falling for, as gravity
+    accelerates in real life, and applying gravity only when the player is not touching the ground or a platform
+    Args:
+        world(Level1): the current level the player is on in order to access their grounded status
+        and alter their speeds and y coordinates
+    '''
+    if world.grounded_1:
         world.player_1.speed = 0
         world.player_1.y += world.player_1.speed
-   elif not world.grounded_1:
+    elif not world.grounded_1:
         world.player_1.y += world.player_1.speed
         world.player_1.speed += 10
-   if world.grounded_2:
-       world.player_2.speed = 0
-       world.player_2.y += world.player_2.speed
-   elif not world.grounded_2:
-       world.player_2.y += world.player_2.speed
-       world.player_2.speed += 10
+    if world.grounded_2:
+        world.player_2.speed = 0
+        world.player_2.y += world.player_2.speed
+    elif not world.grounded_2:
+        world.player_2.y += world.player_2.speed
+        world.player_2.speed += 10
 def create_level1() -> Level1:
     set_background_image(
         'https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279')
