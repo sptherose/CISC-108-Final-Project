@@ -238,11 +238,11 @@ def create_cave_entrance_2() -> DesignerObject:
     cave_entrance_2 = circle(color="black",radius=50,x=70,y=70)
     return cave_entrance_2
 def create_plat_L1() -> [DesignerObject]:
-    platforms_L1 = [rectangle(color="black",width=80,height=10,x=500,y=get_height()-80),
-                    rectangle(color="black",width=340,height=10,x=300,y=get_height()-160),
-                    rectangle(color="black",width=100,height=10,x=370,y=get_height()-260),
-                    rectangle(color="black",width=100,height=10,x=420,y=get_height()-330),
-                    rectangle(color="black", width=100, height=10, x=350, y=get_height() - 430),
+    platforms_L1 = [rectangle(color="black", width=80, height=10, x=515, y=get_height() - 80),
+                    rectangle(color="black", width=340, height=10, x=290, y=get_height() - 170),
+                    rectangle(color="black", width=100, height=10, x=300, y=get_height() - 250),
+                    rectangle(color="black", width=50, height=10, x=400, y=get_height() - 320),
+                    rectangle(color="black", width=100, height=10, x=370, y=get_height() - 430),
                     rectangle(color="black", width=150, height=10, x=200, y=get_height() - 450),
                     rectangle(color="black", width=200, height=10, x=70, y=120)]
     return platforms_L1
