@@ -36,9 +36,5 @@ Milestone 3 Task List:
 - [x] Add Health bar
 - [x] Add Game Over Screen
 - [x] Add Level Completion Screen
-    (Displays Next Level Button When each level is beat)
-- [] Add Game Completion Screen
-    (Displays Total Time when the game is beaten)
+- [x] Add Game Completion Screen
 - [x] Add Game Lost Screen
-    (Displays Quit Game Button)
-- [] Add a way to gain back health (this addition is subject to difficulty found when testing)
