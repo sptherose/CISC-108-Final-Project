@@ -370,7 +370,7 @@ def create_p1_flashlight() -> DesignerObject:
         DesignerObject: a flashlight emoji that begins as hidden
     '''
     player_1_flashlight = emoji("🔦")
-    grow(player_1_flashlight, -1 / 2)
+    shrink(player_1_flashlight,  2)
     turn_left(player_1_flashlight, 45)
     player_1_flashlight.flip_x = False
     hide(player_1_flashlight)
@@ -434,9 +434,11 @@ def move_player1(world: Level1):
         if world.player_1_direction == "right":
             world.player_1_flashlight.y = world.player_1.y + 5
             world.player_1_flashlight.x = world.player_1.x + 20
+            world.player_1_flashlight.flip_x = True
         if world.player_1_direction == "left":
             world.player_1_flashlight.y = world.player_1.y + 5
             world.player_1_flashlight.x = world.player_1.x - 20
+            world.player_1_flashlight.flip_x = False
         show(world.player_1_flashlight)
     if not world.player_1_flash_on:
         hide(world.player_1_flashlight)
@@ -490,7 +492,7 @@ def create_p2_flashlight() -> DesignerObject:
         DesignerObject: a flashlight emoji that begins as hidden
     '''
     player_2_flashlight = emoji("🔦")
-    grow(player_2_flashlight, -1 / 2)
+    shrink(player_2_flashlight, 2)
     turn_left(player_2_flashlight, 45)
     hide(player_2_flashlight)
     return player_2_flashlight
@@ -539,9 +541,11 @@ def move_player2(world: Level1):
         if world.player_2_direction == "right":
             world.player_2_flashlight.y = world.player_2.y + 5
             world.player_2_flashlight.x = world.player_2.x + 20
+            world.player_2_flashlight.flip_x = True
         if world.player_2_direction == "left":
             world.player_2_flashlight.y = world.player_2.y + 5
             world.player_2_flashlight.x = world.player_2.x - 20
+            world.player_2_flashlight.flip_x = False
         show(world.player_2_flashlight)
     if not world.player_2_flash_on:
         hide(world.player_2_flashlight)
