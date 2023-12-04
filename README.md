@@ -1,15 +1,35 @@
-# CISC-108-Final-Project
-Game for CISC-108 Final Project
+# Scandere
+The 2-Player Platform Game
 
+About The Game:
+This game is a 2 player game in which both players need to reach the "cave entrance" (the black circle) in order to 
+beat the game. Each player has 3 hp which is displayed at the top right corner of the screen. Every time a player 
+gets hit by a bat they lose 1 health. In order to avoid getting hit, the player needs to shine a flashlight that hits 
+the bat to make it disappear. If either of the players reach 0 hearts then players both lose and a game over 
+screen will appear. 
+
+Preview:
+https://youtu.be/nIIgc9jnwzo
+
+Instructions:
+Player 1 Controls: 
+W Key to jump, A Key to move left, D Key to move right, S Key to shine flashlight 
+Player 2 Controls:
+Up Arrow Key to jump, Left Arrow Key to move left, Right Arrow Key to move right, Down Arrow Key to shine flashlight
+
+Author:
 Name: Samantha Paez
 Email: sampaez@udel.edu
 
-Game Description: 
-2 Player (1 Player controls their character using WASD and the other uses the Arrow Keys) 
-Platformer game where players have to scale a mountain from the inside.
-Players move and jump onto platforms using parkour to reach the next level (3 levels total)
-Advance to next level by reaching the cave entrance at the top of each level (both players have to be there)
-Have to flash a flashlight to scare away bats or else the player might get bitten and lose HP
+Acknowledgements:
+Designer Scene Change Documentation: https://designer-edu.github.io/designer/examples/scenes.html 
+Designer Documentation for Students: https://designer-edu.github.io/designer/students/docs.html#
+Designer Tutorial: https://designer-edu.github.io/designer/examples/firefighter.html#
+Extending Designer Object Documentation: https://designer-edu.github.io/designer/examples/inheritance.html
+Background Images: https://i.redd.it/kdobli2akyh61.jpg, 
+https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279,
+https://cdna.artstation.com/p/assets/images/images/026/366/308/large/alicia-magistrello-basic-cave.jpg?1588597279, 
+https://img.freepik.com/free-vector/entrance-cave-mountain-with-empty-space_107791-9092.jpg?w=2000&t=st=1701373813~exp=1701374413~hmac=3e18601fcf8632cc5d4f240c3fc30cbc94ab5cf0478dc8f328c75730dff62528
 
 Milestone 1 Task List:
 - [x] create 2 player objects
