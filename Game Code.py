@@ -251,7 +251,6 @@ def move_bats_1(level1:Level1):
     '''
     for bat in level1.bats:
         target = choice([level1.player_1, level1.player_2])
-        point_towards(bat,target)
         target_x = target.x
         target_y = target.y
         if (bat.x > target_x):
@@ -671,4 +670,4 @@ when('starting:endscreen',create_end_screen)
 when('clicking:endscreen',use_end_buttons)
 when('starting:beatL1',create_beat_L1_screen)
 when('clicking:beatL1',use_beat_L1_buttons)
-debug()
+start()
